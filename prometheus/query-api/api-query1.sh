@@ -12,4 +12,8 @@ curl -G \
 --data-urlencode 'query=kube_pod_container_resource_requests_cpu_cores{storeloc="EAST"} offset 5m' \
 https://fed-prometheus-server.company.com/api/v1/query
 
+# Filters with URL manual encoding
+# %7B = { , %7D = }, %3D = "=", %22 = " 
+curl 'https://fed-prometheus-server.company.com/api/v1/query?query=kube_pod_container_resource_requests_cpu_cores%7Bstoreloc%3D%22T0553%22%7D'
+
 
