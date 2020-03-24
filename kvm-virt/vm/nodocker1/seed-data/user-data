@@ -1,0 +1,38 @@
+#cloud-config
+# Customize as per your need. At least change username (vivek) and ssh-ed22519 
+# key with your actual public key
+ 
+# Hostname management
+preserve_hostname: False
+hostname: nodocker1
+fqdn: nodocker1.gm.com
+ 
+# Setup Users with ssh keys so that I can log in into new machine
+users:
+    - default
+    - name: gm
+      groups: ['root']
+      shell: /bin/bash
+      sudo: ALL=(ALL) NOPASSWD:ALL
+      ssh-authorized-keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA7+/taOUgncD8VrXIsC0bn1D2eIkFRFVAMBNVA7/LKJV4IQnqgPJ/mNjlbexQLdk0DImxwvsNN3IARzzgS+z7wMG+J7CKs5H1Jqa8ajwPNHGgAs5FKLPkKyn09uJmTtGzsxChBN+xZ0WOuLzY1osaaRkLqWZdL+CrrJVIHDVv7UUvo5uRx6JXN0PWhzs9yomhkPApInhIGLIXJcPDHlmIXaDmx3VSZAcPJzlWTPklfeSZ8SCyKQv0V6fA9+H6eQxJ9bcsW4myYWdT5qht8ssDatExNcCRdFDwlgus2XDxvjIthBI74/FvVbE94UFCtTviA9dOwBGBG6O6TqSqA417Kw== gm
+ 
+# Configure where output will go
+output:
+  all: ">> /var/log/cloud-init.log"
+ 
+# configure interaction with ssh server
+#ssh_genkeytypes: ['ed25519', 'rsa']
+ 
+# Install your public ssh key to the first user-defined user configured
+# in cloud.cfg in the template (optional since I created gm user already above)
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA7+/taOUgncD8VrXIsC0bn1D2eIkFRFVAMBNVA7/LKJV4IQnqgPJ/mNjlbexQLdk0DImxwvsNN3IARzzgS+z7wMG+J7CKs5H1Jqa8ajwPNHGgAs5FKLPkKyn09uJmTtGzsxChBN+xZ0WOuLzY1osaaRkLqWZdL+CrrJVIHDVv7UUvo5uRx6JXN0PWhzs9yomhkPApInhIGLIXJcPDHlmIXaDmx3VSZAcPJzlWTPklfeSZ8SCyKQv0V6fA9+H6eQxJ9bcsW4myYWdT5qht8ssDatExNcCRdFDwlgus2XDxvjIthBI74/FvVbE94UFCtTviA9dOwBGBG6O6TqSqA417Kw== KVM VM Lab SSH Login key for user
+ 
+# set timezone for VM
+timezone: Asia/Kolkata
+ 
+# Remove cloud-init 
+runcmd:
+  - systemctl stop network && systemctl start network
+  - yum -y remove cloud-init
